@@ -1,6 +1,5 @@
-package com.upsidedowndev.vibeplayer.ui.theme
+package com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.VibePlayer" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#0A131D</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_app_icon</item>
+        <item name="postSplashScreenTheme">@style/Theme.VibePlayer</item>
+    </style>
 </resources>
