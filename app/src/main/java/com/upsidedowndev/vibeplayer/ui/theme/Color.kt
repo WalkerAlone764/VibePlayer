@@ -17,3 +17,5 @@ val onSurfaceVariant = Color(0xFFA7BBD1)
 val surfaceDisable = Color(0xFF4C647C)
 val background = Color(0xFF0A131D)
 val tertiary = Color(0xFFF1FF95)
+
+val white = Color(0xFFFFFFFF)
