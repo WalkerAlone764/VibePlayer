@@ -23,6 +23,17 @@ val DisabledText = Color(0xFF4C647C)
 val Surface = Color(0xFF0A131D)
 val Accent = Color(0xFFF1FF95)
 
+val primary = Color(0xFFDE84FF)
+val surfaceContainerHighest = Color(0xFF1A2735).copy(0.28f)
+val onSurface = Color(0xFFFFFFFF)
+val onSurfaceVariant = Color(0xFFA7BBD1)
+val surfaceDisable = Color(0xFF4C647C)
+val background = Color(0xFF0A131D)
+val tertiary = Color(0xFFF1FF95)
+
+val white = Color(0xFFFFFFFF)
+
+
 val ColorScheme.primaryButton: Color
     get() = Primary
 
