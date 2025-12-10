@@ -15,11 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.DisabledText
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Hover
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Primary
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Primary30
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.PrimaryText
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
 @Composable
@@ -35,18 +30,24 @@ fun VibeButton(
         modifier = modifier
             .graphicsLayer {
                 shadowElevation = 20.dp.toPx()
-                ambientShadowColor = if (isEnabled && !isPressed) Primary
-                else Color.Transparent
-                spotShadowColor = if (isEnabled && !isPressed) Primary
-                else Color.Transparent
+//                ambientShadowColor = if (isEnabled && !isPressed) Primary
+//                else Color.Transparent
+//                spotShadowColor = if (isEnabled && !isPressed) Primary
+//                else Color.Transparent
             },
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isEnabled) {
-                if (isPressed) Primary30.copy(0.6f)
-                else Primary
-            } else Hover,
-            contentColor = if (isEnabled) PrimaryText
-            else DisabledText
+//            containerColor =
+//                if (isEnabled) {
+//                if (isPressed) {
+//                    Primary30.copy(0.6f)
+//                }
+//                else Primary
+//            } else {
+//                Hover
+//            }
+//            ,
+//            contentColor = if (isEnabled) PrimaryText
+//            else DisabledText
         )
     ) {
         Text(

@@ -11,9 +11,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Arrow_Up
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Primary
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Primary30
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.PrimaryText
 
 @Composable
 fun VibeFabButton(
@@ -26,14 +23,14 @@ fun VibeFabButton(
         modifier = modifier
             .graphicsLayer{
                 shadowElevation = 10.dp.toPx()
-                ambientShadowColor = if (!isPressed) Primary
-                else Color.Transparent
-                spotShadowColor = if (!isPressed) Primary
-                else Color.Transparent
+//                ambientShadowColor = if (!isPressed) Primary
+//                else Color.Transparent
+//                spotShadowColor = if (!isPressed) Primary
+//                else Color.Transparent
             },
-        containerColor = if (isPressed) Primary30.copy(0.6f)
-        else Primary,
-        contentColor = PrimaryText,
+//        containerColor = if (isPressed) Primary30.copy(0.6f)
+//        else Primary,
+//        contentColor = PrimaryText,
         shape = CircleShape
     ) {
         Icon(
