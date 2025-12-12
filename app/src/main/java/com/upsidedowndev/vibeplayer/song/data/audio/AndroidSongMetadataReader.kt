@@ -19,7 +19,7 @@ object AndroidSongMetadataReader: SongMetadataReader {
 
             Log.d("SongMetadataReader", "Title: $title, Artist: $artist, Duration: $duration, Image size: ${image?.size}")
 
-            return SongMetadata(filePath, title, artist, null, duration)
+            return SongMetadata(filePath, title, artist, image, duration)
         } catch (e: Exception) {
             Log.e("SongMetadataReader", "Error reading metadata for $filePath", e)
             // Return empty metadata on error

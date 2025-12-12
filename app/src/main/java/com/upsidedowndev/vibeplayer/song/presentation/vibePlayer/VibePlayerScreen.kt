@@ -67,10 +67,6 @@ fun VibePlayerScreen(
 ) {
     val activity = LocalContext.current as Activity
 
-    _root_ide_package_.com.upsidedowndev.vibeplayer.song.presentation.permission.PermissionScreen(
-        onClick = { onAction(VibePlayerAction.GrantPermissionClicked) }
-    )
-
     state.permissionDialogQueue
         .reversed()
         .forEach { permission ->
