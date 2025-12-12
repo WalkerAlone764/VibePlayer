@@ -18,9 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Primary30
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.PrimaryText
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.SecondaryText
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
 @Composable
@@ -34,12 +31,13 @@ fun FilterButton(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
-            .border(
-                width = 1.dp,
-                color = if (selected) Primary30.copy(0.7f)
-                else SecondaryText.copy(0.7f),
-                shape = CircleShape
-            )
+//            .border(
+//                width = 1.dp,
+//                color = if (selected) Primary30.copy(0.7f)
+//                else SecondaryText.copy(0.7f)
+//                ,
+//                shape = CircleShape
+//            )
             .clickable(onClick = onClick)
     ) {
         Row(
@@ -57,7 +55,7 @@ fun FilterButton(
                 fontFamily = hostgroteskFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
-                color = PrimaryText
+//                color = PrimaryText
             )
         }
 

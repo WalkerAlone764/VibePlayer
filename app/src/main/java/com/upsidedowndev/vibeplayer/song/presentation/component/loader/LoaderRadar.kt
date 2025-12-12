@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Accent
 
 @Composable
 fun LoaderRadar(
@@ -47,76 +46,76 @@ fun LoaderRadar(
 
         // rings
         val ringCount = 3
-        for (i in 0..ringCount + 1) {
-            when (i) {
-                // center dot
-                0 -> {
-                    drawCircle(
-                        color = Accent,
-                        radius = radius * 0.08f, // 50 * 0.08
-                        center = center
-                    )
-                }
-                // radar outer circle
-                3 -> {
-                    drawCircle(
-                        color = Accent,
-                        radius = radius * (i / ringCount.toFloat()), // 50 * (i / 3)
-                        center = center,
-                        style = Stroke(width = 3f)
-                    )
-                }
-                // outer circle
-                ringCount + 1 -> {
-                    drawCircle(
-                        color = Accent.copy(alpha = 0.1f),
-                        radius = radius + 20f, // 50 + 20
-                        center = center,
-                        style = Stroke(width = 3f)
-                    )
-                }
-                // radar inner circle
-                else -> {
-                    drawCircle(
-                        color = Accent.copy(alpha = 0.1f),
-                        radius = radius * (i / ringCount.toFloat()), // 50 * (i / 3)
-                        center = center,
-                        style = Stroke(width = 3f)
-                    )
-                }
-            }
-        }
+//        for (i in 0..ringCount + 1) {
+//            when (i) {
+//                // center dot
+//                0 -> {
+//                    drawCircle(
+//                        color = Accent,
+//                        radius = radius * 0.08f, // 50 * 0.08
+//                        center = center
+//                    )
+//                }
+//                // radar outer circle
+//                3 -> {
+//                    drawCircle(
+//                        color = Accent,
+//                        radius = radius * (i / ringCount.toFloat()), // 50 * (i / 3)
+//                        center = center,
+//                        style = Stroke(width = 3f)
+//                    )
+//                }
+//                // outer circle
+//                ringCount + 1 -> {
+//                    drawCircle(
+//                        color = Accent.copy(alpha = 0.1f),
+//                        radius = radius + 20f, // 50 + 20
+//                        center = center,
+//                        style = Stroke(width = 3f)
+//                    )
+//                }
+//                // radar inner circle
+//                else -> {
+//                    drawCircle(
+//                        color = Accent.copy(alpha = 0.1f),
+//                        radius = radius * (i / ringCount.toFloat()), // 50 * (i / 3)
+//                        center = center,
+//                        style = Stroke(width = 3f)
+//                    )
+//                }
+//            }
+//        }
 
         // sweep
-        rotate(
-            degrees = angle, // 0 to 360
-            pivot = center // (50, 50)
-        ) {
-            // sweep line
-            drawLine(
-                color = Accent.copy(alpha = 0.9f),
-                start = center,
-                end = center + Offset(radius, 0f),
-                strokeWidth = 3f
-            )
-
-            val sweepBrush = Brush.sweepGradient(
-                colors = listOf(
-                    Accent.copy(alpha = 0.0f),
-                    Accent.copy(alpha = 0.0f),
-                    Accent.copy(alpha = 0.5f)
-                ),
-                center = center
-            )
-
-            // sweep arc
-            drawArc(
-                brush = sweepBrush,
-                startAngle = -135f,
-                sweepAngle = 135f,
-                useCenter = true
-            )
-        }
+//        rotate(
+//            degrees = angle, // 0 to 360
+//            pivot = center // (50, 50)
+//        ) {
+//            // sweep line
+//            drawLine(
+//                color = Accent.copy(alpha = 0.9f),
+//                start = center,
+//                end = center + Offset(radius, 0f),
+//                strokeWidth = 3f
+//            )
+//
+//            val sweepBrush = Brush.sweepGradient(
+//                colors = listOf(
+//                    Accent.copy(alpha = 0.0f),
+//                    Accent.copy(alpha = 0.0f),
+//                    Accent.copy(alpha = 0.5f)
+//                ),
+//                center = center
+//            )
+//
+//            // sweep arc
+//            drawArc(
+//                brush = sweepBrush,
+//                startAngle = -135f,
+//                sweepAngle = 135f,
+//                useCenter = true
+//            )
+//        }
 
     }
 }

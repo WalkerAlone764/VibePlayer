@@ -23,9 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.upsidedowndev.vibeplayer.R
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Accent
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Scan
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Surface
 import com.upsidedowndev.vibeplayer.song.util.IconContainer
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
@@ -45,7 +43,7 @@ fun MainTopBar(
                 Icon(
                     painter = painterResource(R.drawable.ic_launcher_foreground),
                     contentDescription = null,
-                    tint = Accent,
+//                    tint = Accent,
                     modifier = Modifier
                         .size(24.dp)
                 )
@@ -65,8 +63,8 @@ fun MainTopBar(
 
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Surface,
-            titleContentColor = Accent
+//            containerColor = Surface,
+//            titleContentColor = Accent
         ),
         actions = {
             IconContainer(

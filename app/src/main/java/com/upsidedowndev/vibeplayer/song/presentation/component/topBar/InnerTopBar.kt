@@ -21,8 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Arrow_Left
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.PrimaryText
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Surface
 import com.upsidedowndev.vibeplayer.song.util.IconContainer
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
@@ -60,8 +58,8 @@ fun InnerTopBar(
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Surface,
-            titleContentColor = PrimaryText
+//            containerColor = Surface,
+//            titleContentColor = PrimaryText
         ),
         actions = {
             Box(

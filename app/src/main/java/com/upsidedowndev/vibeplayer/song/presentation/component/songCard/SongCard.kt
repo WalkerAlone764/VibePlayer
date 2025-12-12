@@ -24,9 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.upsidedowndev.vibeplayer.R
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.PrimaryText
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.SecondaryText
-import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Surface
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
 data class Song(
@@ -48,7 +45,7 @@ fun SongCard(
             .height(IntrinsicSize.Max),
         shape = RoundedCornerShape(20f),
         colors = CardDefaults.cardColors(
-            containerColor = Surface
+//            containerColor = Surface
         )
     ) {
         Row(
@@ -74,7 +71,7 @@ fun SongCard(
                     fontFamily = hostgroteskFamily,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = PrimaryText
+//                    color = PrimaryText
                 )
                 Spacer(
                     modifier = Modifier
@@ -85,7 +82,7 @@ fun SongCard(
                     fontFamily = hostgroteskFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
-                    color = SecondaryText
+//                    color = SecondaryText
                 )
             }
             Text(
@@ -93,12 +90,12 @@ fun SongCard(
                 fontFamily = hostgroteskFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
-                color = SecondaryText
+//                color = SecondaryText
             )
         }
         HorizontalDivider(
             thickness = 1.dp,
-            color = SecondaryText.copy(0.5f)
+//            color = SecondaryText.copy(0.5f)
         )
     }
 }
