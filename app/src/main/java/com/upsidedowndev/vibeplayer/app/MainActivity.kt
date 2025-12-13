@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.upsidedowndev.vibeplayer.app.navigation.NavigationRoot
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.VibePlayerTheme
 import com.upsidedowndev.vibeplayer.song.presentation.permission.PermissionRoot
 import com.upsidedowndev.vibeplayer.song.presentation.player.MusicPlayerRoot
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             VibePlayerTheme {
-                PermissionRoot()
+                NavigationRoot()
             }
         }
     }
