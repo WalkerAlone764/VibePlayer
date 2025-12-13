@@ -44,7 +44,6 @@ fun ScanMusicScreen(
         },
         bottomBar = {},
         contentWindowInsets = WindowInsets.safeContent,
-//        containerColor = Surface
     ) { paddingValues ->
         Column(
             modifier = Modifier
