@@ -13,7 +13,6 @@ import com.upsidedowndev.vibeplayer.R
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.button.VibeFabButton
 import com.upsidedowndev.vibeplayer.song.presentation.component.songCard.Song
 import com.upsidedowndev.vibeplayer.song.presentation.component.songCard.SongCard
-import com.upsidedowndev.vibeplayer.song.presentation.component.topBar.MainTopBar
 import kotlin.random.Random
 
 @Composable
@@ -24,9 +23,6 @@ fun SongScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            MainTopBar(
-                onScanClick = onScanClick
-            )
         },
         floatingActionButton = {
             VibeFabButton(

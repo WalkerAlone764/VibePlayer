@@ -4,4 +4,5 @@ package com.upsidedowndev.vibeplayer.song.presentation.permission
 sealed interface PermissionEvent {
     data object LaunchPermissionRequest : PermissionEvent
     data object OpenSettings: PermissionEvent
+    data object OnPermissionGranted: PermissionEvent
 }

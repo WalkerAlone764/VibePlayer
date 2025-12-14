@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.upsidedowndev.vibeplayer.song.presentation.component.topBar
+package com.upsidedowndev.vibeplayer.song.presentation.scan_result.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -19,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.upsidedowndev.vibeplayer.R
@@ -28,10 +28,11 @@ import com.upsidedowndev.vibeplayer.song.util.IconContainer
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
 @Composable
-fun MainTopBar(
-    modifier: Modifier = Modifier,
-    onScanClick: () -> Unit = {}
+fun ScanTopAppBar(
+    onScanClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
+
     TopAppBar(
         modifier = modifier,
         title = {
@@ -43,7 +44,6 @@ fun MainTopBar(
                 Icon(
                     painter = painterResource(R.drawable.ic_launcher_foreground),
                     contentDescription = null,
-//                    tint = Accent,
                     modifier = Modifier
                         .size(24.dp)
                 )
@@ -59,13 +59,6 @@ fun MainTopBar(
                 )
             }
         },
-        navigationIcon = {
-
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-//            containerColor = Surface,
-//            titleContentColor = Accent
-        ),
         actions = {
             IconContainer(
                 onClick = onScanClick,
@@ -74,12 +67,10 @@ fun MainTopBar(
                 icon = Icons.Filled.Scan,
                 contentDescription = "Scan"
             )
-        }
-    )
-}
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            titleContentColor = MaterialTheme.colorScheme.tertiary
 
-@Preview
-@Composable
-private fun MainTopBarPreview() {
-    MainTopBar()
+        )
+    )
 }
