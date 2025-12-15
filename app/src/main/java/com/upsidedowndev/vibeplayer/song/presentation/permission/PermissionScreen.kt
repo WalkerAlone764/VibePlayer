@@ -40,13 +40,12 @@ import com.upsidedowndev.vibeplayer.core.presentation.designSystem.button.VibeBu
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.VibePlayerTheme
 import com.upsidedowndev.vibeplayer.core.presentation.util.ObserveAsEvents
 import com.upsidedowndev.vibeplayer.song.presentation.permission.use_cases.ReadMediaAudioPermissionTextProvider
-import com.upsidedowndev.vibeplayer.song.presentation.vibePlayer.VibePlayerAction
-import com.upsidedowndev.vibeplayer.song.presentation.vibePlayer.VibePlayerEvent
 import com.upsidedowndev.vibeplayer.song.presentation.vibePlayer.openAppSettings
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
 @Composable
 fun PermissionRoot(
+    onPermissionGranted: () -> Unit,
     viewModel: PermissionViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -58,9 +57,10 @@ fun PermissionRoot(
         }
     )
 
-    val activityResult = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    val activityResult =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
-    }
+        }
 
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -84,6 +84,8 @@ fun PermissionRoot(
                     activityResult.launch(it)
                 }
             }
+
+            PermissionEvent.OnPermissionGranted -> onPermissionGranted()
         }
     }
 

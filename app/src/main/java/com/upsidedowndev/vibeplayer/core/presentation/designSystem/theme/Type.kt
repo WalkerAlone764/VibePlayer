@@ -77,6 +77,11 @@ val Typography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 22.sp
     ),
+    titleSmall = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
+    )
     /*titleSmall = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.SemiBold,

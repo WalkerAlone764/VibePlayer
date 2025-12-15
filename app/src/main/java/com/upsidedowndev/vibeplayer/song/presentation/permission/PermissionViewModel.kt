@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upsidedowndev.vibeplayer.song.presentation.vibePlayer.VibePlayerEvent
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -51,6 +52,7 @@ class PermissionViewModel : ViewModel() {
                     }
                 }else{
                     // navigation to song screen
+                        _event.trySend(PermissionEvent.OnPermissionGranted)
                 }
             }
             is PermissionAction.OnPermissionResult -> {
@@ -61,12 +63,14 @@ class PermissionViewModel : ViewModel() {
                                     + getRequiredPermission()
                         )
                     }
+                    return
                 }
                 _state.update {
                     it.copy(
-                        hasPermissionGranted = action.isGranted
+                        hasPermissionGranted = true
                     )
                 }
+                _event.trySend(PermissionEvent.OnPermissionGranted)
             }
             PermissionAction.OnRationaleOkClicked -> {
                 _state.update {
@@ -77,6 +81,7 @@ class PermissionViewModel : ViewModel() {
             }
         }
     }
+
     private fun getRequiredPermission(): String {
         return if (Build.VERSION.SDK_INT >= 33) {
             Manifest.permission.READ_MEDIA_AUDIO
