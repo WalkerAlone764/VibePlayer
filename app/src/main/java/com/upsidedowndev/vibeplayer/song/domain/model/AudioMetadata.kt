@@ -1,6 +1,7 @@
-package com.upsidedowndev.vibeplayer.song.domain.audio
+package com.upsidedowndev.vibeplayer.song.domain.model
 
 data class AudioMetadata(
+    val id: Long,
     val title: String,
     val artist: String,
     val durationMs: String,

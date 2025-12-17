@@ -1,24 +1,27 @@
 package com.upsidedowndev.vibeplayer.song.presentation.permission
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,15 +40,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.upsidedowndev.vibeplayer.R
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.button.VibeButton
+import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.PrimaryText
+import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.SecondaryText
+import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Surface
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.VibePlayerTheme
 import com.upsidedowndev.vibeplayer.core.presentation.util.ObserveAsEvents
-import com.upsidedowndev.vibeplayer.song.presentation.permission.use_cases.ReadMediaAudioPermissionTextProvider
-import com.upsidedowndev.vibeplayer.song.presentation.vibePlayer.openAppSettings
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
 @Composable
 fun PermissionRoot(
-    onPermissionGranted: () -> Unit,
+    onNavigateToSongScreen: () -> Unit,
     viewModel: PermissionViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -57,15 +61,7 @@ fun PermissionRoot(
         }
     )
 
-    val activityResult =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-
-        }
-
-    val context = LocalContext.current
-    val activity = LocalActivity.current
-
-    ObserveAsEvents(viewModel.event) { event ->
+    ObserveAsEvents(viewModel.eventChannel) { event ->
         when (event) {
             PermissionEvent.LaunchPermissionRequest -> {
                 permissionLauncher.launch(
@@ -75,34 +71,11 @@ fun PermissionRoot(
                 )
             }
 
-            PermissionEvent.OpenSettings -> {
-                Intent(
-                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.fromParts("package", context.packageName, null)
-                ).also {
-//                    context.startActivity(it)
-                    activityResult.launch(it)
-                }
+            PermissionEvent.NavigateToSongScreen -> {
+                onNavigateToSongScreen()
             }
-
-            PermissionEvent.OnPermissionGranted -> onPermissionGranted()
         }
     }
-
-    state.permissionDialogQueue
-        .reversed()
-        .forEach { permission ->
-            PermissionDialog(
-                permissionTextProvider = ReadMediaAudioPermissionTextProvider(),
-                isPermanentlyDeclined = !ActivityCompat.shouldShowRequestPermissionRationale(
-                    activity,
-                    permission
-                ),
-                onDismiss = { viewModel.onAction(PermissionAction.DismissPermissionDialog) },
-                onOkClick = { viewModel.onAction(PermissionAction.OnRationaleOkClicked) },
-                onGoToAppSettingsClick = { activity?.openAppSettings() }
-            )
-        }
 
     PermissionScreen(
         state = state,
@@ -110,23 +83,21 @@ fun PermissionRoot(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PermissionScreen(
     state: PermissionState,
     onAction: (PermissionAction) -> Unit,
 ) {
-
     Scaffold(
-        modifier = Modifier,
-        contentWindowInsets = WindowInsets.safeDrawing,
+        topBar = {},
+        contentWindowInsets = WindowInsets.safeContent,
+        containerColor = Surface
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(
-                    horizontal = 28.dp
-                ),
+                .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -145,17 +116,19 @@ fun PermissionScreen(
                 fontFamily = hostgroteskFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 28.sp,
+                color = PrimaryText
             )
             Spacer(
                 modifier = Modifier
                     .height(4.dp)
             )
             Text(
-                text = "VibePlayer needs access to your music files to build your library and play songs",
+                text = "VibePlayer needs access to your music files to build\n" +
+                        "your library and play songs",
                 fontFamily = hostgroteskFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = SecondaryText,
                 textAlign = TextAlign.Center
             )
             Spacer(
@@ -172,11 +145,72 @@ fun PermissionScreen(
             )
         }
     }
+
+    val context = LocalContext.current
+    if (state.showRationaleDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                onAction(PermissionAction.OnRationaleOkClicked)
+            },
+            confirmButton = {
+                Text(
+                    text = "Try Again",
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                                    context as Activity,
+                                    if (Build.VERSION.SDK_INT >= 33) Manifest.permission.READ_MEDIA_AUDIO
+                                    else Manifest.permission.READ_EXTERNAL_STORAGE
+                                )
+                            ) {
+                                val intent = Intent(
+                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                    Uri.fromParts("package", context.packageName, null)
+                                )
+                                context.startActivity(intent)
+                            }
+                            onAction(PermissionAction.OnRationaleTryAgainClicked)
+                        }
+                        .padding(16.dp)
+                )
+            },
+            dismissButton = {
+                Text(
+                    text = "OK",
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onAction(PermissionAction.OnRationaleOkClicked)
+                        }
+                        .padding(16.dp)
+                )
+            },
+            title = {
+                Text(text = "Permission Required")
+            },
+            text = {
+                Text(
+                    text = "VibePlayer needs access to your music files to " +
+                            "function properly. Without this permission, the " +
+                            "app cannot build your music library or play " +
+                            "songs."
+                )
+            },
+            modifier = Modifier
+        )
+    }
+
 }
+
 
 @Preview
 @Composable
-private fun Preview() {
+private fun PermissionScreenPreview() {
     VibePlayerTheme {
         PermissionScreen(
             state = PermissionState(),

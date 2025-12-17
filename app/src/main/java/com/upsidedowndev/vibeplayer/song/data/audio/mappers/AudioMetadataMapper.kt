@@ -2,13 +2,14 @@ package com.upsidedowndev.vibeplayer.song.data.audio.mappers
 
 import androidx.core.net.toUri
 import com.upsidedowndev.vibeplayer.song.data.audio.AudioMetadataDto
-import com.upsidedowndev.vibeplayer.song.domain.audio.AudioMetadata
+import com.upsidedowndev.vibeplayer.song.domain.model.AudioMetadata
 
 /**
  * Maps the data layer [AudioMetadataDto] to the domain layer [AudioMetadata].
  */
 fun AudioMetadataDto.toDomain(): AudioMetadata {
     return AudioMetadata(
+        id = this.id,
         title = this.title,
         artist = this.artist,
         durationMs = this.durationMs,
@@ -22,6 +23,7 @@ fun AudioMetadataDto.toDomain(): AudioMetadata {
  */
 fun AudioMetadata.toDto(): AudioMetadataDto {
     return AudioMetadataDto(
+        id = this.id,
         title = this.title,
         artist = this.artist,
         durationMs = this.durationMs,

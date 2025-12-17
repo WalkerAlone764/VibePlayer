@@ -15,8 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.upsidedowndev.vibeplayer.app.navigation.NavigationRoot
+import com.upsidedowndev.vibeplayer.app.navigation.Route
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.VibePlayerTheme
-import com.upsidedowndev.vibeplayer.song.presentation.scan_result.ScanResultRoot
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +41,6 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.READ_EXTERNAL_STORAGE
         }
 
-
-
         setContent {
             VibePlayerTheme {
                 val hasPermission = remember {
@@ -51,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     ) == android.content.pm.PackageManager.PERMISSION_GRANTED
                 }
                 NavigationRoot(
-                    startDestination = if (hasPermission) Routes.ScanResult else Routes.Permission
+                    startDestination = if (hasPermission) Route.SongScreen else Route.PermissionScreen
                 )
             }
         }

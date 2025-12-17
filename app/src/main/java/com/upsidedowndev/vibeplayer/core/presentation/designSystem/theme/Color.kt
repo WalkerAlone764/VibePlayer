@@ -33,6 +33,16 @@ val tertiary = Color(0xFFF1FF95)
 
 val white = Color(0xFFFFFFFF)
 
+val Primary = Color(0xFFDE84FF)
+val Primary30 = Color(0xFFDE84FF).copy(alpha = 0.3f)
+val Hover = Color(0xFF1A2735).copy(alpha = 0.28f)
+
+val PrimaryText = Color(0xFFFFFFFF)
+val SecondaryText = Color(0xFFA7BBD1)
+val DisabledText = Color(0xFF4C647C)
+
+val Surface = Color(0xFF0A131D)
+val Accent = Color(0xFFF1FF95)
 
 //val ColorScheme.primaryButton: Color
 //    get() = Primary
