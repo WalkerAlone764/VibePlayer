@@ -20,15 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.button.VibeButton
+import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.Surface
+import com.upsidedowndev.vibeplayer.song.presentation.component.ScanFilter
 import com.upsidedowndev.vibeplayer.song.presentation.component.loader.LoaderRadar
 import com.upsidedowndev.vibeplayer.song.presentation.component.topBar.InnerTopBar
-import com.upsidedowndev.vibeplayer.song.presentation.component.ScanFilter
-import com.upsidedowndev.vibeplayer.song.presentation.models.SelectedFilter
+import com.upsidedowndev.vibeplayer.song.presentation.scanMusic.models.ScanFilterState
+import com.upsidedowndev.vibeplayer.song.presentation.scanMusic.models.SelectedFilter
 
 @Composable
 fun ScanMusicScreen(
     modifier: Modifier = Modifier,
-    onScanClick: (com.upsidedowndev.vibeplayer.song.presentation.models.ScanFilterState) -> Unit,
+    onScanClick: (ScanFilterState) -> Unit,
     onBackClick: () -> Unit,
 ) {
     var durationSelected by remember { mutableStateOf(SelectedFilter.NONE) }
@@ -44,11 +46,12 @@ fun ScanMusicScreen(
         },
         bottomBar = {},
         contentWindowInsets = WindowInsets.safeContent,
+        containerColor = Surface
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(),
+                .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -86,10 +89,20 @@ fun ScanMusicScreen(
             VibeButton(
                 text = "Scan",
                 onClick = {
+                    val durationFilterMs = when(durationSelected){
+                        SelectedFilter.OPTION_A -> 30_000L
+                        SelectedFilter. OPTION_B -> 60_000L
+                        else -> 0L
+                    }
+                    val sizeFilterKb = when(sizeSelected){
+                        SelectedFilter.OPTION_A -> 100L
+                        SelectedFilter. OPTION_B -> 500L
+                        else -> 0L
+                    }
                     onScanClick(
-                        _root_ide_package_.com.upsidedowndev.vibeplayer.song.presentation.models.ScanFilterState(
-                            ignoreDuration = durationSelected != SelectedFilter.NONE,
-                            ignoreSize = sizeSelected != SelectedFilter.NONE
+                        ScanFilterState(
+                            ignoreDurationLessThanMs = durationFilterMs,
+                            ignoreSizeLessThanKb = sizeFilterKb
                         )
                     )
                 },

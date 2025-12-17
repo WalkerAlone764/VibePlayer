@@ -33,61 +33,49 @@ class PermissionViewModel : ViewModel() {
             initialValue = PermissionState()
         )
 
-    private val _event = Channel<PermissionEvent>()
-    val event = _event.receiveAsFlow()
+    private val _eventChannel = Channel<PermissionEvent>()
+    val eventChannel = _eventChannel.receiveAsFlow()
 
     fun onAction(action: PermissionAction) {
         when (action) {
-            PermissionAction.DismissPermissionDialog -> {
-                _state.update {
-                    it.copy(
-                        permissionDialogQueue = it.permissionDialogQueue.drop(1)
-                    )
-                }
-            }
             PermissionAction.GrantPermissionClicked -> {
                 if (!state.value.hasPermissionGranted) {
-                    viewModelScope.launch {
-                        _event.send(PermissionEvent.LaunchPermissionRequest)
-                    }
-                }else{
-                    // navigation to song screen
-                        _event.trySend(PermissionEvent.OnPermissionGranted)
+                    getRequiredPermission()
+                } else {
+                    navigateToSongScreen()
                 }
             }
+
+            PermissionAction.OnRationaleOkClicked,
+            PermissionAction.OnRationaleTryAgainClicked -> {
+                _state.update { it.copy(showRationaleDialog = false) }
+            }
+
             is PermissionAction.OnPermissionResult -> {
-                if (!action.isGranted) {
-                    _state.update {
-                        it.copy(
-                            permissionDialogQueue = it.permissionDialogQueue
-                                    + getRequiredPermission()
-                        )
-                    }
-                    return
-                }
-                _state.update {
-                    it.copy(
-                        hasPermissionGranted = true
-                    )
-                }
-                _event.trySend(PermissionEvent.OnPermissionGranted)
-            }
-            PermissionAction.OnRationaleOkClicked -> {
-                _state.update {
-                    it.copy(
-                        permissionDialogQueue = it.permissionDialogQueue.drop(1)
-                    )
+                if (action.isGranted) {
+                    _state.update { it.copy(hasPermissionGranted = true) }
+                    navigateToSongScreen()
+                } else {
+                    _state.update { it.copy(showRationaleDialog = true) }
                 }
             }
         }
     }
 
-    private fun getRequiredPermission(): String {
+    private fun getRequiredPermission() = viewModelScope.launch {
+        _eventChannel.send(PermissionEvent.LaunchPermissionRequest)
+    }
+
+    private fun navigateToSongScreen() = viewModelScope.launch {
+        _eventChannel.send(PermissionEvent.NavigateToSongScreen)
+    }
+
+    /*private fun getRequiredPermission(): String {
         return if (Build.VERSION.SDK_INT >= 33) {
             Manifest.permission.READ_MEDIA_AUDIO
         } else {
             Manifest.permission.READ_EXTERNAL_STORAGE
         }
-    }
+    }*/
 
 }

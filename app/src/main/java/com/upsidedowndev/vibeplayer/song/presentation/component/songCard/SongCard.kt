@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.upsidedowndev.vibeplayer.R
+import com.upsidedowndev.vibeplayer.song.domain.model.AudioMetadata
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
 data class Song(
@@ -36,7 +37,7 @@ data class Song(
 
 @Composable
 fun SongCard(
-    song: Song,
+    song: AudioMetadata,
     modifier: Modifier = Modifier
 ) {
     Card(

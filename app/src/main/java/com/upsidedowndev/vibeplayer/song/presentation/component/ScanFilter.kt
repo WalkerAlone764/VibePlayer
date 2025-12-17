@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.upsidedowndev.vibeplayer.song.presentation.models.SelectedFilter
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.button.FilterButton
+import com.upsidedowndev.vibeplayer.song.presentation.scanMusic.models.SelectedFilter
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 
 @Composable
