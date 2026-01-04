@@ -2,6 +2,7 @@ package com.upsidedowndev.vibeplayer.app
 
 import android.app.Application
 import com.upsidedowndev.vibeplayer.app.di.appModule
+import com.upsidedowndev.vibeplayer.core.di.databaseModule
 import com.upsidedowndev.vibeplayer.song.di.songModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,7 @@ class VibeApplication: Application() {
 
         startKoin {
             androidContext(this@VibeApplication)
-            modules(appModule,songModule)
+            modules(appModule, songModule, databaseModule)
         }
     }
 

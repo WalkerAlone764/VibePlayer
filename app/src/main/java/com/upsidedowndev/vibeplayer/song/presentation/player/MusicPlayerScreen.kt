@@ -33,10 +33,14 @@ import com.upsidedowndev.vibeplayer.song.presentation.player.components.PlayerTo
 import com.upsidedowndev.vibeplayer.song.presentation.player.model.PlaybackState
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MusicPlayerRoot(
-    viewModel: MusicPlayerViewModel = koinViewModel()
+    audioPath: String,
+    viewModel: MusicPlayerViewModel = koinViewModel(
+        parameters = { parametersOf(audioPath) }
+    )
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

@@ -40,6 +40,7 @@ class AndroidAudioPlayer(
 
                 _activeTrack.update {
                     AudioTrack(
+                        filePath = filePath,
                         totalDuration = this.duration.milliseconds,
                         durationPlayed = Duration.ZERO,
                         isPlaying = true

@@ -3,33 +3,11 @@ package com.upsidedowndev.vibeplayer.song.data.audio
 import android.net.Uri
 
 data class AudioMetadataDto(
-    val title: String,
-    val artist: String,
-    val durationMs: String,
-    val uri: Uri,
-    val image: ByteArray
+    val filePath: String,
+    val title: String?,
+    val artist: String?,
+    val thumbnail: ByteArray?,
+    val duration: Long
 ) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
 
-        other as AudioMetadataDto
-
-        if (durationMs != other.durationMs) return false
-        if (title != other.title) return false
-        if (artist != other.artist) return false
-        if (uri != other.uri) return false
-        if (!image.contentEquals(other.image)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = durationMs.hashCode()
-        result = 31 * result + title.hashCode()
-        result = 31 * result + artist.hashCode()
-        result = 31 * result + uri.hashCode()
-        result = 31 * result + image.contentHashCode()
-        return result
-    }
 }

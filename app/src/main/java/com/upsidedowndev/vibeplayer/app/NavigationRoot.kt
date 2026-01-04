@@ -8,6 +8,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.upsidedowndev.vibeplayer.song.presentation.permission.PermissionRoot
+import com.upsidedowndev.vibeplayer.song.presentation.player.MusicPlayerRoot
 import com.upsidedowndev.vibeplayer.song.presentation.scan_result.ScanResultRoot
 
 @Composable
@@ -41,7 +42,20 @@ fun NavigationRoot(
 
                 Routes.ScanResult -> {
                     NavEntry(key) {
-                        ScanResultRoot()
+                        ScanResultRoot(
+                            navigateToPlayer = { audioPath ->
+                                backStack.add(Routes.MusicPlayer(audioPath))
+                            }
+
+                        )
+                    }
+                }
+
+                is Routes.MusicPlayer -> {
+                    NavEntry(key) {
+                        MusicPlayerRoot(
+                            audioPath = key.path
+                        )
                     }
                 }
 

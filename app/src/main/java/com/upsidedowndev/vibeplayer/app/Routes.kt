@@ -11,4 +11,7 @@ sealed interface Routes: NavKey {
 
     @Serializable
     data object ScanResult: Routes, NavKey
+
+    @Serializable
+    data class MusicPlayer(val path: String): Routes, NavKey
 }
