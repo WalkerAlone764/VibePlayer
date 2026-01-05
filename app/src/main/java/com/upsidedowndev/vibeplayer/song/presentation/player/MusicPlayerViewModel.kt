@@ -1,8 +1,8 @@
 package com.upsidedowndev.vibeplayer.song.presentation.player
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.upsidedowndev.vibeplayer.song.domain.audio.AudioMetadata
 import com.upsidedowndev.vibeplayer.song.domain.audio.AudioPlayer
 import com.upsidedowndev.vibeplayer.song.domain.audio.SongMetadataReader
 import com.upsidedowndev.vibeplayer.song.domain.repository.AudioRepository
@@ -14,15 +14,20 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class  MusicPlayerViewModel(
     private val audioPath: String,
     private val audioPlayer: AudioPlayer,
-    private val songMetadataReader: SongMetadataReader
+    private val songMetadataReader: SongMetadataReader,
+    private val repository: AudioRepository
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
+
+    private val selectedAudioIndex = MutableStateFlow(0)
+
+    private val audioFiles = MutableStateFlow(emptyList<AudioMetadata>())
+
 
     private val _state = MutableStateFlow(MusicPlayerState(
         songDetails = songMetadataReader.getMetadata(audioPath)
@@ -44,39 +49,45 @@ class  MusicPlayerViewModel(
 
     init {
 
+        repository
+            .collectAudioFiles()
+            .onEach { audios ->
+                audioFiles.update { audios }
+                val metaData = audios.firstOrNull { it.filePath == audioPath }
+                if (metaData != null) {
+                    selectedAudioIndex.update { audios.indexOf(metaData) }
+                }
+            }
+
+            .launchIn(viewModelScope)
+
         audioPlayer
             .activeTrack
             .onEach { activeTrack ->
-               if (activeTrack == null) {
-                   _state.update { it.copy(
-                       hasActiveMusic = false,
-                   ) }
-                   return@onEach
-               }
-                _state.update { it.copy(
-                    hasActiveMusic = true,
-                    playerState = if(activeTrack.isPlaying) PlaybackState.PLAYING else PlaybackState.PAUSED,
-                    playedDuration = activeTrack.durationPlayed,
-                    totalDuration = activeTrack.totalDuration
-                ) }
-
-                if (activeTrack.filePath == audioPath) {
-                    _state.update { it.copy(
-                        hasActiveMusic = true,
-                        playerState = if(activeTrack.isPlaying) PlaybackState.PLAYING else PlaybackState.PAUSED,
-                        playedDuration = activeTrack.durationPlayed,
-                        totalDuration = activeTrack.totalDuration
-                    ) }
-                } else {
-                    _state.update { it.copy(
-                        hasActiveMusic = false,
-                    ) }
-                    audioPlayer.stop()
-                    onClickStart()
+                if (activeTrack == null) {
+                    _state.update {
+                        it.copy(
+                            hasActiveMusic = false,
+                        )
+                    }
+                    return@onEach
                 }
 
-            }
+                val metaData = audioFiles.value.firstOrNull { it.filePath == state.value.songDetails.filePath }
 
+                if (metaData != null) {
+                    selectedAudioIndex.update { audioFiles.value.indexOf(metaData) }
+                    _state.update {
+                        it.copy(
+                            hasActiveMusic = true,
+                            playerState = if (activeTrack.isPlaying) PlaybackState.PLAYING else PlaybackState.PAUSED,
+                            playedDuration = activeTrack.durationPlayed,
+                            totalDuration = activeTrack.totalDuration,
+                            songDetails = songMetadataReader.getMetadata(activeTrack.filePath)
+                        )
+                    }
+                }
+            }
             .launchIn(viewModelScope)
     }
 
@@ -85,7 +96,55 @@ class  MusicPlayerViewModel(
             MusicPlayerAction.OnClickStart -> onClickStart()
             MusicPlayerAction.OnClickPause -> onClickPause()
             MusicPlayerAction.OnClickResume -> onClickResume()
+            MusicPlayerAction.OnClickNext -> onClickNext()
+            MusicPlayerAction.OnClickPrevious -> onClickPrevious()
+            is MusicPlayerAction.OnSeek -> onSeek(action.progress)
         }
+    }
+
+    private fun onSeek(progress: Float) {
+        val newPosition = (progress * state.value.totalDuration.inWholeMilliseconds)
+        if (state.value.playerState != PlaybackState.PLAYING) {
+            audioPlayer.play(state.value.songDetails.filePath, onComplete = {
+                onComplete()
+            })
+        }
+        audioPlayer.seekTo(newPosition.toInt())
+    }
+
+    private fun onClickNext() {
+        audioPlayer.stop()
+        val nextIndex = selectedAudioIndex.value + 1
+        if (nextIndex >= audioFiles.value.size) {
+            _state.update { it.copy(
+                playerState = PlaybackState.STOPPED,
+                hasActiveMusic = false
+            ) }
+            return
+        }
+        val nextAudioFile = audioFiles.value[nextIndex]
+        audioPlayer.play(
+            nextAudioFile.filePath,
+            onComplete = { onComplete() }
+        )
+    }
+
+    private fun onClickPrevious() {
+        audioPlayer.stop()
+        val prevIndex = selectedAudioIndex.value - 1
+        if (prevIndex < 0) {
+            _state.update { it.copy(
+                playerState = PlaybackState.STOPPED,
+                hasActiveMusic = false
+            ) }
+            return
+        }
+
+        val prevAudioFile = audioFiles.value[prevIndex]
+        audioPlayer.play(
+            prevAudioFile.filePath,
+            onComplete = { onComplete() }
+        )
     }
 
     private fun onClickResume() {
@@ -95,20 +154,31 @@ class  MusicPlayerViewModel(
 
     private fun onClickPause() {
         audioPlayer.pause()
-//        _state.update { it.copy(
-//            playerState = PlaybackState.PAUSED
-//        ) }
     }
 
     private fun onClickStart() {
         audioPlayer.play(
             _state.value.songDetails.filePath,
             onComplete = {
-                _state.update { it.copy(
-                    playerState = PlaybackState.STOPPED
-                ) }
+                onComplete()
             }
         )
+    }
+
+    private fun onComplete() {
+        val nextIndex = selectedAudioIndex.value + 1
+        if (nextIndex >= audioFiles.value.size) {
+            audioPlayer.stop()
+            _state.update { it.copy(
+                playerState = PlaybackState.STOPPED,
+                hasActiveMusic = false
+            ) }
+            return
+        }
+        val nextAudioFile = audioFiles.value[nextIndex]
+
+        audioPlayer.stop()
+        audioPlayer.play(nextAudioFile.filePath, onComplete = { onComplete() })
     }
 
 }

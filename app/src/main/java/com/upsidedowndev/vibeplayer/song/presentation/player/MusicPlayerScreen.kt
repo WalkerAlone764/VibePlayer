@@ -62,7 +62,11 @@ fun MusicPlayerScreen(
         },
         bottomBar = {
             MediaControls(
-                onSkipPrevious = {},
+                isPlaying = state.playerState == PlaybackState.PLAYING,
+                progress = state.progress,
+                onSeek = {
+                    onAction(MusicPlayerAction.OnSeek(it))
+                },
                 onPause = {
                     onAction(MusicPlayerAction.OnClickPause)
                 },
@@ -77,9 +81,13 @@ fun MusicPlayerScreen(
                         }
                     }
                 },
-                onSkipNext = {},
-                progress = state.progress,
-                isPlaying = state.playerState == PlaybackState.PLAYING,
+                onSkipPrevious = {
+                    onAction(MusicPlayerAction.OnClickPrevious)
+                },
+                onSkipNext = {
+                    onAction(MusicPlayerAction.OnClickNext)
+                },
+
                 modifier = Modifier
                     .padding(bottom = 20.dp)
             )

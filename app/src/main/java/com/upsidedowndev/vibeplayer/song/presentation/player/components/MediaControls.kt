@@ -4,21 +4,21 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +35,7 @@ fun MediaControls(
     onPause: () -> Unit,
     onPlay: () -> Unit,
     onSkipNext: () -> Unit,
+    onSeek: (Float) -> Unit,
     modifier: Modifier = Modifier,
     progress: Float,
     isPlaying: Boolean
@@ -45,19 +46,12 @@ fun MediaControls(
             .height(IntrinsicSize.Max)
 //            .background(Surface)
     ) {
-        Box {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                color = MaterialTheme.colorScheme.onSurface,
-                trackColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.5f),
-                progress = { progress }
-            )
-        }
-        Spacer(
+        Slider(
+            value = progress,
+            onValueChange = onSeek,
             modifier = Modifier
-                .height(4.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         )
         Row(
             modifier = Modifier
@@ -77,7 +71,7 @@ fun MediaControls(
                 animationSpec = tween(
                     durationMillis = 300,
                     easing = LinearEasing
-                )
+                ), label = ""
             ) { playing ->
                 if (playing) {
                     IconContainer(
@@ -120,13 +114,15 @@ fun MediaControls(
 @Preview
 @Composable
 private fun MediaControlsPreview() {
-    val isPlaying = remember { mutableStateOf(false) }
+    var isPlaying by remember { mutableStateOf(false) }
+    var progress by remember { mutableStateOf(0.7f) }
     MediaControls(
         onSkipPrevious = {},
-        onPause = { isPlaying.value = false },
-        onPlay = { isPlaying.value = true },
+        onPause = { isPlaying = false },
+        onPlay = { isPlaying = true },
         onSkipNext = {},
-        progress = 0.7f,
-        isPlaying = isPlaying.value
+        onSeek = { progress = it },
+        progress = progress,
+        isPlaying = isPlaying
     )
 }

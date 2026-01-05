@@ -5,4 +5,7 @@ sealed interface MusicPlayerAction {
     data object OnClickStart: MusicPlayerAction
     data object OnClickPause: MusicPlayerAction
     data object OnClickResume: MusicPlayerAction
+    data object OnClickNext: MusicPlayerAction
+    data object OnClickPrevious: MusicPlayerAction
+    data class OnSeek(val progress: Float): MusicPlayerAction
 }

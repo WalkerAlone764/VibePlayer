@@ -60,6 +60,11 @@ class AndroidAudioPlayer(
         }
     }
 
+    override fun seekTo(duration: Int) {
+        mediaPlayer
+            ?.seekTo(duration)
+    }
+
     override fun pause() {
         if(activeTrack.value?.isPlaying != true) {
             return
