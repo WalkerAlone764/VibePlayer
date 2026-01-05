@@ -54,7 +54,10 @@ fun NavigationRoot(
                 is Routes.MusicPlayer -> {
                     NavEntry(key) {
                         MusicPlayerRoot(
-                            audioPath = key.path
+                            audioPath = key.path,
+                            onGoBack = {
+                                backStack.remove(Routes.MusicPlayer(key.path))
+                            }
                         )
                     }
                 }

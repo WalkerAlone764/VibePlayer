@@ -73,6 +73,14 @@ class  MusicPlayerViewModel(
                     return@onEach
                 }
 
+                if (activeTrack.filePath != state.value.songDetails.filePath) {
+                    if (activeTrack.isPlaying) {
+                        audioPlayer.stop()
+                        audioPlayer.play(state.value.songDetails.filePath, onComplete = { onComplete() })
+                    }
+                    return@onEach
+                }
+
                 val metaData = audioFiles.value.firstOrNull { it.filePath == state.value.songDetails.filePath }
 
                 if (metaData != null) {
@@ -93,6 +101,7 @@ class  MusicPlayerViewModel(
 
     fun onAction(action: MusicPlayerAction) {
         when (action) {
+            MusicPlayerAction.OnClickBack -> Unit
             MusicPlayerAction.OnClickStart -> onClickStart()
             MusicPlayerAction.OnClickPause -> onClickPause()
             MusicPlayerAction.OnClickResume -> onClickResume()
@@ -123,6 +132,9 @@ class  MusicPlayerViewModel(
             return
         }
         val nextAudioFile = audioFiles.value[nextIndex]
+        _state.update { it.copy(
+            songDetails = nextAudioFile
+        ) }
         audioPlayer.play(
             nextAudioFile.filePath,
             onComplete = { onComplete() }
@@ -141,6 +153,9 @@ class  MusicPlayerViewModel(
         }
 
         val prevAudioFile = audioFiles.value[prevIndex]
+        _state.update { it.copy(
+            songDetails = prevAudioFile
+        ) }
         audioPlayer.play(
             prevAudioFile.filePath,
             onComplete = { onComplete() }

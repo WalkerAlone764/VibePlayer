@@ -38,6 +38,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun MusicPlayerRoot(
     audioPath: String,
+    onGoBack: () -> Unit,
     viewModel: MusicPlayerViewModel = koinViewModel(
         parameters = { parametersOf(audioPath) }
     )
@@ -45,7 +46,12 @@ fun MusicPlayerRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     MusicPlayerScreen(
-        state = state, onAction = viewModel::onAction
+        state = state, onAction = { action ->
+            when(action) {
+                is MusicPlayerAction.OnClickBack -> onGoBack()
+                else -> viewModel.onAction(action)
+            }
+        }
     )
 }
 
@@ -58,7 +64,11 @@ fun MusicPlayerScreen(
     Scaffold(
         modifier = Modifier,
         topBar = {
-            PlayerTopBar()
+            PlayerTopBar(
+                onBackClick = {
+                    onAction(MusicPlayerAction.OnClickBack)
+                }
+            )
         },
         bottomBar = {
             MediaControls(

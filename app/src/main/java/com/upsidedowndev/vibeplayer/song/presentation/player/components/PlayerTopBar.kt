@@ -16,7 +16,7 @@ import com.upsidedowndev.vibeplayer.song.util.IconContainer
 @Composable
 fun PlayerTopBar(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit
 ) {
     TopAppBar(
         modifier = modifier,
@@ -36,5 +36,7 @@ fun PlayerTopBar(
 @Preview
 @Composable
 private fun PlayerTopBarPreview() {
-    PlayerTopBar()
+    PlayerTopBar(
+        onBackClick = {}
+    )
 }

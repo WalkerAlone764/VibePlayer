@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,13 +43,13 @@ fun MediaControls(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
-//            .background(Surface)
     ) {
-        Slider(
+        CustomSlider(
             value = progress,
             onValueChange = onSeek,
             modifier = Modifier
                 .fillMaxWidth()
+                .height(50.dp)
                 .padding(horizontal = 16.dp)
         )
         Row(
