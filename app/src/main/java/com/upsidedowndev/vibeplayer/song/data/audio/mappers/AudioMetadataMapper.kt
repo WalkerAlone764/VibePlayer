@@ -11,9 +11,9 @@ fun AudioMetadataDto.toDomain(): AudioMetadata {
     return AudioMetadata(
         title = this.title,
         artist = this.artist,
-        durationMs = this.durationMs,
-        uriString = this.uri.toString(),
-        image = this.image
+        duration = this.duration,
+        filePath = this.filePath,
+        thumbnail = this.thumbnail
     )
 }
 
@@ -24,8 +24,8 @@ fun AudioMetadata.toDto(): AudioMetadataDto {
     return AudioMetadataDto(
         title = this.title,
         artist = this.artist,
-        durationMs = this.durationMs,
-        uri = this.uriString.toUri(),
-        image = this.image
+        duration = this.duration,
+        filePath = this.filePath,
+        thumbnail = this.thumbnail
     )
 }

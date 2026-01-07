@@ -33,15 +33,25 @@ import com.upsidedowndev.vibeplayer.song.presentation.player.components.PlayerTo
 import com.upsidedowndev.vibeplayer.song.presentation.player.model.PlaybackState
 import com.upsidedowndev.vibeplayer.util.hostgroteskFamily
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MusicPlayerRoot(
-    viewModel: MusicPlayerViewModel = koinViewModel()
+    audioPath: String,
+    onGoBack: () -> Unit,
+    viewModel: MusicPlayerViewModel = koinViewModel(
+        parameters = { parametersOf(audioPath) }
+    )
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     MusicPlayerScreen(
-        state = state, onAction = viewModel::onAction
+        state = state, onAction = { action ->
+            when(action) {
+                is MusicPlayerAction.OnClickBack -> onGoBack()
+                else -> viewModel.onAction(action)
+            }
+        }
     )
 }
 
@@ -54,11 +64,19 @@ fun MusicPlayerScreen(
     Scaffold(
         modifier = Modifier,
         topBar = {
-            PlayerTopBar()
+            PlayerTopBar(
+                onBackClick = {
+                    onAction(MusicPlayerAction.OnClickBack)
+                }
+            )
         },
         bottomBar = {
             MediaControls(
-                onSkipPrevious = {},
+                isPlaying = state.playerState == PlaybackState.PLAYING,
+                progress = state.progress,
+                onSeek = {
+                    onAction(MusicPlayerAction.OnSeek(it))
+                },
                 onPause = {
                     onAction(MusicPlayerAction.OnClickPause)
                 },
@@ -73,9 +91,13 @@ fun MusicPlayerScreen(
                         }
                     }
                 },
-                onSkipNext = {},
-                progress = state.progress,
-                isPlaying = state.playerState == PlaybackState.PLAYING,
+                onSkipPrevious = {
+                    onAction(MusicPlayerAction.OnClickPrevious)
+                },
+                onSkipNext = {
+                    onAction(MusicPlayerAction.OnClickNext)
+                },
+
                 modifier = Modifier
                     .padding(bottom = 20.dp)
             )

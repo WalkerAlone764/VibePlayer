@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.VibePlayerTheme
-import com.upsidedowndev.vibeplayer.song.presentation.scan_result.ScanResultRoot
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

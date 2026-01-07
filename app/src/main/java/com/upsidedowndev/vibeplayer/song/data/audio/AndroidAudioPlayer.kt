@@ -40,6 +40,7 @@ class AndroidAudioPlayer(
 
                 _activeTrack.update {
                     AudioTrack(
+                        filePath = filePath,
                         totalDuration = this.duration.milliseconds,
                         durationPlayed = Duration.ZERO,
                         isPlaying = true
@@ -57,6 +58,11 @@ class AndroidAudioPlayer(
                 fileInputStream.close()
             }
         }
+    }
+
+    override fun seekTo(duration: Int) {
+        mediaPlayer
+            ?.seekTo(duration)
     }
 
     override fun pause() {

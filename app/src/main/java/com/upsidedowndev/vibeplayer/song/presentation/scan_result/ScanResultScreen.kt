@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,17 +32,26 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.upsidedowndev.vibeplayer.R
 import com.upsidedowndev.vibeplayer.core.presentation.designSystem.theme.VibePlayerTheme
+import com.upsidedowndev.vibeplayer.song.presentation.scan_result.components.ItemCard
 import com.upsidedowndev.vibeplayer.song.presentation.scan_result.components.ScanTopAppBar
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ScanResultRoot(
-    viewModel: ScanResultViewModel = viewModel()
+    navigateToPlayer: (path: String) -> Unit,
+    viewModel: ScanResultViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ScanResultScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when(action) {
+                is ScanResultAction.OnSelectSong -> {
+                    navigateToPlayer(action.songUrl)
+                }
+            }
+        }
     )
 }
 
@@ -106,7 +116,10 @@ fun ScanResultScreen(
             }
 
             if (!state.isScanning) {
-
+                Content(
+                    state = state,
+                    onAction = onAction
+                )
             }
         }
 
@@ -116,11 +129,23 @@ fun ScanResultScreen(
 @Composable
 private fun Content(
     state: ScanResultState,
+    onAction: (ScanResultAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-//    AnimatedContent(
-//        targetState = state.
-//    ) { }
+
+    
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(state.audios, key = { audio -> audio.filePath }) { audio ->
+            ItemCard(
+                audioFile = audio,
+                onClick = {
+                    onAction(ScanResultAction.OnSelectSong(audio.filePath))
+                }
+            )
+        }
+    }
 
 }
 
