@@ -1,6 +1,5 @@
 package com.upsidedowndev.vibeplayer.song.data.audio
 
-import android.net.Uri
 
 data class AudioMetadataDto(
     val filePath: String,
@@ -8,6 +7,4 @@ data class AudioMetadataDto(
     val artist: String?,
     val thumbnail: ByteArray?,
     val duration: Long
-) {
-
-}
+)

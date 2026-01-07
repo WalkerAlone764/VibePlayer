@@ -7,6 +7,7 @@ import com.upsidedowndev.vibeplayer.song.domain.audio.AudioPlayer
 import com.upsidedowndev.vibeplayer.song.domain.audio.SongMetadataReader
 import com.upsidedowndev.vibeplayer.song.domain.repository.AudioRepository
 import com.upsidedowndev.vibeplayer.song.presentation.player.model.PlaybackState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class  MusicPlayerViewModel(
     private val audioPath: String,
@@ -122,7 +124,9 @@ class  MusicPlayerViewModel(
     }
 
     private fun onClickNext() {
-        audioPlayer.stop()
+        if (state.value.playerState == PlaybackState.PLAYING) {
+            audioPlayer.stop()
+        }
         val nextIndex = selectedAudioIndex.value + 1
         if (nextIndex >= audioFiles.value.size) {
             _state.update { it.copy(
@@ -181,19 +185,10 @@ class  MusicPlayerViewModel(
     }
 
     private fun onComplete() {
-        val nextIndex = selectedAudioIndex.value + 1
-        if (nextIndex >= audioFiles.value.size) {
-            audioPlayer.stop()
-            _state.update { it.copy(
-                playerState = PlaybackState.STOPPED,
-                hasActiveMusic = false
-            ) }
-            return
+        viewModelScope.launch {
+            delay(100)
+            onClickNext()
         }
-        val nextAudioFile = audioFiles.value[nextIndex]
-
-        audioPlayer.stop()
-        audioPlayer.play(nextAudioFile.filePath, onComplete = { onComplete() })
     }
 
 }
