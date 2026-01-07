@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -45,12 +46,12 @@ fun ItemCard(
             .height(IntrinsicSize.Max),
         shape = RoundedCornerShape(20f),
         colors = CardDefaults.cardColors(
-//            containerColor = Surface
+            containerColor = Color.Transparent
         )
     ) {
         Row(
             modifier = Modifier
-                .padding(vertical = 12.dp)
+                .padding(vertical = 10.dp, horizontal = 16.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -61,7 +62,8 @@ fun ItemCard(
                         bitmap = bitmap.asImageBitmap(),
                         contentDescription = "Song thumbnail",
                         modifier = Modifier
-                            .size(64.dp),
+                            .size(64.dp)
+                            .clip(RoundedCornerShape(10.dp)),
                         contentScale = ContentScale.FillBounds
                     )
                 } else {
@@ -69,7 +71,8 @@ fun ItemCard(
                         painter = painterResource(id = R.drawable.album_default_image),
                         contentDescription = "Song thumbnail",
                         modifier = Modifier
-                            .size(64.dp),
+                            .size(64.dp)
+                            .clip(RoundedCornerShape(10.dp)),
                         contentScale = ContentScale.FillBounds
                     )
                 }
@@ -77,7 +80,8 @@ fun ItemCard(
                 painter = painterResource(id = R.drawable.album_default_image),
                 contentDescription = "Song thumbnail",
                 modifier = Modifier
-                    .size(64.dp),
+                    .size(64.dp)
+                    .clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.FillBounds
             )
 
@@ -91,7 +95,7 @@ fun ItemCard(
                     fontFamily = hostgroteskFamily,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
                 Spacer(
                     modifier = Modifier
@@ -102,7 +106,7 @@ fun ItemCard(
                     fontFamily = hostgroteskFamily,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Text(
@@ -110,13 +114,10 @@ fun ItemCard(
                 fontFamily = hostgroteskFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.secondary.copy(0.5f)
-        )
+
     }
 }
 
